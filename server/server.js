@@ -5,10 +5,10 @@ const cors = require('cors');
 
 const app = express();
 
-//app.use(cors());
+app.use(cors());
 
 app.get('/list', (req, res) => res.send(data));
 
-app.listen(5000, () => {
-    console.log('Server listening on port 5000!');
+app.listen(3000, () => {
+    console.log('Server listening on port 3000!');
 });
