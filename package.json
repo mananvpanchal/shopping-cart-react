@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "cors": "^2.8.4",
     "express": "^4.16.3",
+    "npm-run-all": "^4.1.2",
     "path": "^0.12.7",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
@@ -14,8 +16,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "dev": "node server/server.js",
-    "heroku-postbuild": "yarn --production=false && yarn run build"
-  },
-  "proxy": "http://localhost:5000"
+    "server": "node server/server.js",
+    "dev": "npm-run-all -p start server"
+  }
 }

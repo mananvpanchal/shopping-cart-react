@@ -4,6 +4,7 @@ import './App.css';
 
 import Header from './components/header';
 import ShoppingList from './components/shopping-list';
+import { get } from './api/api';
 
 class App extends Component {
 
@@ -22,11 +23,16 @@ class App extends Component {
   }
 
   componentDidMount() {
-    /*fetch('/list')
+    /*const response = fetch('/list')
     .then(res => res.json())
     .then(res => {
       this.setState({ data: res });
-    }).catch(console.log)*/
+      return res;
+    }).catch(console.log);
+    console.log('app ',response);*/
+    get('/list', (res) => {
+      this.setState({ data: res });
+    });
   }
 }
 
