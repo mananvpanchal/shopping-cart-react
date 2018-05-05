@@ -11,5 +11,6 @@ app.get('/list', (req, res) => res.send(data));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
+  console.log(process.env.PORT, process.env.HOST, process.env.host);
     console.log('Server listening on port '+port+'!');
 });
