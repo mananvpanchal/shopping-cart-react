@@ -1,20 +1,32 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './app.css';
+
+import Header from './components/header';
+import ShoppingList from './components/shopping-list';
 
 class App extends Component {
+
+  constructor() {
+    super();
+    this.state = { data: null };
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Header/>
+        <ShoppingList data={this.state.data}/>
       </div>
     );
+  }
+
+  componentDidMount() {
+    fetch('/list')
+    .then(res => res.json())
+    .then(res => {
+      this.setState({ data: res });
+    }).catch(console.log)
   }
 }
 
