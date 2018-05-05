@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './app.css';
+import './App.css';
 
 import Header from './components/header';
 import ShoppingList from './components/shopping-list';
