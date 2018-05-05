@@ -22,11 +22,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-    /*fetch('/list')
+    fetch('/list')
     .then(res => res.json())
     .then(res => {
       this.setState({ data: res });
-    }).catch(console.log)*/
+    }).catch(console.log)
   }
 }
 
