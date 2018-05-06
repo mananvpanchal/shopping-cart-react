@@ -7,6 +7,9 @@ import ShoppingList from './components/shopping-list';
 import CartList from './components/cart-list';
 import { get } from './api/api';
 
+import { addToCartList, removeFromCartList } from './utils/cart-list';
+import { addToShopList, removeFromShopList } from './utils/shop-list';
+
 class App extends Component {
 
   constructor() {
@@ -25,17 +28,15 @@ class App extends Component {
     });
   }
 
-  getItemIndex(list, item) {
-    for(let i = 0 ; i < list.length; i++) {
-      console.log(list[i], item);
-      if(list[i].id === item.id) {
-        return i;
-      }
-    }
-    return -1;
+  addToCart(item) {
+    if(item.count === 0) return;
+    this.setState({ 
+      shopList: removeFromShopList(this.state.shopList, item), 
+      cartList: addToCartList(this.state.cartList, item)
+    });
   }
 
-  addToCart(item) {
+  /*addToCart(item) {
     if(item.count === 0) return;
     const cloneItem = Object.assign({}, item);
     const idx = this.getItemIndex(this.state.cartList, cloneItem);
@@ -56,9 +57,16 @@ class App extends Component {
         cartList: [...this.state.cartList, {...cloneItem}]
       });
     }
-  }
+  }*/
 
   removeFromCart(item) {
+    this.setState({ 
+      shopList: addToShopList(this.state.shopList, item), 
+      cartList: removeFromCartList(this.state.cartList, item)
+    });
+  }
+
+  /*removeFromCart(item) {
     const cloneItem = Object.assign({}, item);
     const sIdx = this.getItemIndex(this.state.shopList, item);
     const idx = this.getItemIndex(this.state.cartList, item);
@@ -78,7 +86,7 @@ class App extends Component {
         cartList: [...tempList]
       });
     }
-  }
+  }*/
 
   showCartList() {
     this.setState({ showShopList: false });
