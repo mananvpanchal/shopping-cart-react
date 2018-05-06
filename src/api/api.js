@@ -1,6 +1,6 @@
-const url = process.env.NODE_ENV === 'development' 
-    ? 'http://localhost:5000' 
-    : 'https://mysterious-bayou-41214.herokuapp.com';
+const url = process.env.REACT_APP_API;
+
+console.log(process.env);
 
 export const get = (path, successCL) => fetch(url+path)
 .then(res => res.json())
