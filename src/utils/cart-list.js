@@ -16,9 +16,8 @@ export const addToCartList = (cartList, item) => {
 export const removeFromCartList = (cartList, item) => {
   const idx = getItemIndex(cartList, item);
   const tempList = [...cartList];
-  const cloneItem = Object.assign({}, item);
-  if(cloneItem.count === 1) {
-    tempList.splice(cartList.indexOf(item), 1);
+  if(tempList[idx].count === 1) {
+    tempList.splice(idx, 1);
   } else {
     tempList[idx].count = tempList[idx].count - 1;
   }

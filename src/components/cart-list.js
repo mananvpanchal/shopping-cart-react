@@ -5,12 +5,12 @@ import ListItem from './list-item';
 
 export default ({ data, removeFromCart }) => {
     console.log(data);
-    const comps = data 
+    const comps = data.length > 0  
         ? data.map((d, idx) => <ListItem key={idx} 
             data={d} 
             btnName={'Remove From Cart'} 
             btnFunc={removeFromCart}/>) 
-        : 'Loading Cart List...';
+        : 'Empty Cart, Please add something...';
     return (
         <section>
             <ListHeader countTxt={'No. of Items'}/>

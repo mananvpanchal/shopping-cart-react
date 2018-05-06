@@ -83,3 +83,12 @@
   position: relative;
   top: 10px;
 }
+
+.header-cell {
+  font-weight: bold;
+  float: left;
+  width: 10%;
+  margin: 2px; 
+  position: relative;
+  top: 10px;
+}
