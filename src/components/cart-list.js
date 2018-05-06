@@ -3,16 +3,17 @@ import React from 'react';
 import ListHeader from './list-header';
 import ListItem from './list-item';
 
-export default ({ data, addToCart }) => {
+export default ({ data, removeFromCart }) => {
+    console.log(data);
     const comps = data 
         ? data.map((d, idx) => <ListItem key={idx} 
             data={d} 
-            btnName={'Add to Cart'} 
-            btnFunc={addToCart}/>) 
-        : 'Loading Shopping List...';
+            btnName={'Remove From Cart'} 
+            btnFunc={removeFromCart}/>) 
+        : 'Loading Cart List...';
     return (
         <section>
-            <ListHeader countTxt={'Stock'}/>
+            <ListHeader countTxt={'No. of Items'}/>
             {comps}
         </section>
     );

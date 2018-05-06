@@ -1,6 +1,4 @@
-const url = process.env.REACT_APP_API;
-
-console.log(process.env);
+const url = 'http://localhost:5000';
 
 export const get = (path, successCL) => fetch(url+path)
 .then(res => res.json())
