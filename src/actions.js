@@ -24,8 +24,9 @@ export const removeFromCart = (payload) => (dispatch, getState) => {
 }
 
 export const addToCart = (payload) => (dispatch, getState) => {
-    dispatch(addToCartList(payload));
+    if(payload.count === 0) return;
     dispatch(removeFromShopList(payload));
+    dispatch(addToCartList(payload));
 }
 
 export const loadShopList = (itemCount) => (dispatch, getState) => {
