@@ -1,20 +1,27 @@
-import { addToCartList, removeFromCartList } from './cart-list';
+import cartList from './cart-list';
+import { 
+    removeFromCartList, 
+    addToShopList, 
+    addToCartList, 
+    removeFromShopList
+} from '../actions';
+
 import chai from 'chai';
 
-describe('Cart List', () => {
+describe('Reducer: Cart List', () => {
     it('should be added by one', () => {
-        const emptyCartList = [];
-        const resList = addToCartList(emptyCartList, { id: 1, count: null })
+        const state = [];
+        const resList = cartList(state, addToCartList({ id: 1, count: null }));
         chai.expect(resList).to.deep.equal([{ id: 1, count: 1}]);
     });
 
     it('should be modify (increase count) by existing', () => {
-        const cartList = [
+        const state = [
             { id: 1, count: 2}, { id: 2, count: 7}, 
             { id: 3, count: 4}, { id: 4, count: 3}, 
             { id: 5, count: 5}
         ];
-        const resList = addToCartList(cartList, { id: 1 });
+        const resList = cartList(state, addToCartList({ id: 1 }));
         chai.expect(resList).to.deep.equal([
             { id: 1, count: 3}, { id: 2, count: 7}, 
             { id: 3, count: 4}, { id: 4, count: 3}, 
@@ -23,12 +30,12 @@ describe('Cart List', () => {
     });
 
     it('should be modify (decrease count) by existing', () => {
-        const cartList = [
+        const state = [
             { id: 1, count: 2}, { id: 2, count: 7}, 
             { id: 3, count: 4}, { id: 4, count: 3}, 
             { id: 5, count: 5}
         ];
-        const resList = removeFromCartList(cartList, { id: 4 });
+        const resList = cartList(state, removeFromCartList({ id: 4 }));
         chai.expect(resList).to.deep.equal([
             { id: 1, count: 2}, { id: 2, count: 7}, 
             { id: 3, count: 4}, { id: 4, count: 2}, 
@@ -37,8 +44,8 @@ describe('Cart List', () => {
     });
 
     it('should be removed by last', () => {
-        const cartList = [{ id: 1, count: 1 }];
-        const resList = removeFromCartList(cartList, { id: 1 })
+        const state = [{ id: 1, count: 1 }];
+        const resList = cartList(state, removeFromCartList({ id: 1 }));
         chai.expect(resList).to.deep.equal([]);
     });
 });

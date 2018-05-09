@@ -26,8 +26,10 @@
   height: 40px;
   color: white;
   position: relative;
-  bottom: 20px;
+  bottom: 10px;
   margin: 10px;
+  text-decoration: none;
+  padding: 10px;
 }
 
 .shopping-cart:hover {
@@ -42,9 +44,9 @@
 
 .cart-lable {
   position: relative;
-  bottom: 19px;
+  bottom: 10px;
   margin: 10px;
-  padding: 9px;
+  padding: 10px;
   border: 2px solid white;
 }
 

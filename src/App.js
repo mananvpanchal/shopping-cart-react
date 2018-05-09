@@ -1,75 +1,43 @@
 import React, { Component } from 'react';
 import './App.css';
+import { connect } from 'react-redux';
+import { BrowserRouter, Route, Link, Redirect } from 'react-router-dom';
 
 import Header from './components/header';
 import ShoppingList from './components/shopping-list';
 import CartList from './components/cart-list';
-import { get } from './api/api';
 
-import { addToCartList, removeFromCartList } from './utils/cart-list';
-import { addToShopList, removeFromShopList } from './utils/shop-list';
+import { getShopList, getCartList } from './selectors';
+import { loadShopList, addToCart, removeFromCart } from './actions';
 
 class App extends Component {
-
-  constructor() {
-    super();
-    this.state = {
-      shopList: [],
-      cartList: [],
-      showShopList: true,
-      end: 0,
-      initScrollY: 0
-    };
-
-    this.showShopList = this.showShopList.bind(this);
-    this.showCartList = this.showCartList.bind(this);
-    this.addToCart = this.addToCart.bind(this);
-    this.removeFromCart = this.removeFromCart.bind(this);
-  }
-
-  getShoppingList(itemCount, scrollY) {
-    //console.log(itemCount, scrollY, this.state.initScrollY, '/list?start=' + this.state.end + '&end=' + (this.state.end + itemCount));
-    get('/list?start=' + this.state.end + '&end=' + (this.state.end + itemCount), (res) => {
-      this.setState({
-        showShopList: true,
-        shopList: [...this.state.shopList, ...res],
-        end: this.state.end + itemCount,
-        initScrollY: scrollY ? scrollY : this.state.initScrollY
-      });
-    });
-  }
-
-  addToCart(item) {
-    if (item.count === 0) return;
-    this.setState({
-      shopList: removeFromShopList(this.state.shopList, item),
-      cartList: addToCartList(this.state.cartList, item)
-    });
-  }
-
-  removeFromCart(item) {
-    this.setState({
-      shopList: addToShopList(this.state.shopList, item),
-      cartList: removeFromCartList(this.state.cartList, item)
-    });
-  }
-
-  showCartList() {
-    this.setState({ showShopList: false });
-  }
-
-  showShopList() {
-    this.setState({ showShopList: true });
-  }
 
   render() {
     return (
       <div className="App">
-        <Header showShopList={this.showShopList}
-          showCartList={this.showCartList} cartList={this.state.cartList} />
-        {this.state.showShopList
-          ? <ShoppingList data={this.state.shopList} addToCart={this.addToCart} />
-          : <CartList data={this.state.cartList} removeFromCart={this.removeFromCart} />}
+        <BrowserRouter>
+          <div>
+            <Header
+              shopListBtn={<Link className={"shopping-cart"} to={"/shop-list"}>Shopping List</Link>}
+              cartListBtn={<Link className={"shopping-cart"} to={"/cart-list"}>Shopping Cart</Link>}
+              cartList={this.props.cartList} />
+            <Route exact path="/" render={() => (
+              <Redirect to="/shop-list" />
+            )} />
+            <Route
+              path="/shop-list"
+              render={() => <ShoppingList
+                data={this.props.shopList}
+                addToCart={this.props.addToCart} />
+              } />
+            <Route
+              path="/cart-list"
+              render={() => <CartList
+                data={this.props.cartList}
+                removeFromCart={this.props.removeFromCart} />
+              } />
+          </div>
+        </BrowserRouter>
       </div>
     );
   }
@@ -79,22 +47,15 @@ class App extends Component {
     //Need to put 15 as constant value
     const compsHeight = window.innerHeight - 80 - 15;
     //item height 44 with margin 2 and border 1 (top and bottom)
-    //total comp can be occupied + 1 to show scroll
-    return Math.round(compsHeight / 50) + 1;
+    //total comp can be occupied * 2
+    return Math.round(compsHeight / 50) * 2;
   }
 
-  getItemCountOnScrollY(scrollY) {
-    //item height 50
-    return 50 > scrollY 
-      ? Math.round(50 / scrollY) 
-      : Math.round(scrollY / 50);
-  }
-
-  handleScroll(event, scrollY) {
-    let itemCount = this.state.initScrollY !== 0 
-      ? this.getItemCountOnScrollY(this.state.initScrollY)
-      : this.getItemCountOnScrollY(scrollY);
-    this.getShoppingList(itemCount, this.state.initScrollY === 0 ? scrollY : null );
+  handleScroll(event) {
+    var docEle = document.documentElement;
+    if (Math.ceil(docEle.scrollTop) + window.innerHeight >= docEle.offsetHeight) {
+      this.getShoppingList(this.calculateItemToBeFetched());
+    }
   }
 
   getScrollHandler() {
@@ -105,7 +66,7 @@ class App extends Component {
         setTimeout(() => {
           toBeCalled = true;
           if (window.scrollY > scrollY) {
-            this.handleScroll(event, window.scrollY);
+            this.handleScroll(event);
             scrollY = window.scrollY;
           }
         }, 200);
@@ -122,6 +83,20 @@ class App extends Component {
   componentWillUnmount() {
     window.removeEventListener('scroll', this.getScrollHandler())
   }
+
+  getShoppingList(itemCount) {
+    this.props.loadShopList(itemCount)
+  }
 }
 
-export default App;
+export default connect(
+  (state) => ({
+    cartList: getCartList(state),
+    shopList: getShopList(state)
+  }),
+  (dispatch) => ({
+    loadShopList: (itemCount) => dispatch(loadShopList(itemCount)),
+    addToCart: (item) => dispatch(addToCart(item)),
+    removeFromCart: (item) => dispatch(removeFromCart(item))
+  })
+)(App);
