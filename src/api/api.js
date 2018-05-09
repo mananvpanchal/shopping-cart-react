@@ -1,5 +1,5 @@
-//const url = 'http://localhost:5000';
-const url = 'https://mysterious-bayou-41214.herokuapp.com';
+const url = 'http://localhost:5000';
+//const url = 'https://mysterious-bayou-41214.herokuapp.com';
 
 export const get = (path, successCL) => fetch(url+path)
 .then(res => res.json())
